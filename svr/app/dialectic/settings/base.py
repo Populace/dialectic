@@ -206,21 +206,25 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 
-    # 'storages',
+    'reversion',
+    'storages',
     'corsheaders',
-    'rest_framework',
+    'genericm2m',
+    # 'rest_framework',
     'userena',
     'guardian',
     'easy_thumbnails',
     'userena.contrib.umessages',
     'fluent_comments',
-    'crispy_forms',
+    # 'threadedcomments',
     'django_comments',
-    'django.contrib.sites',
+    'crispy_forms',
 
     'accounts', # proxy for userena
     'policies',
+    'voting',
 )
 
 
@@ -235,20 +239,7 @@ INSTALLED_APPS = (
 
 
 
-#
-# Django Rest Framework
-#
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-    ),
-    'PAGE_SIZE': 10,
-}
+SITE_ID = 1
 
 
 
@@ -267,6 +258,24 @@ AUTH_PROFILE_MODULE = 'accounts.Citizen'
 USERENA_SIGNIN_REDIRECT_URL = '/accounts/%(username)s/'
 LOGIN_URL = '/accounts/signin/'
 LOGOUT_URL = '/accounts/signout/'
+
+
+
+
+#
+# Django Rest Framework
+#
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    ),
+    'PAGE_SIZE': 10,
+}
 
 
 
@@ -311,18 +320,21 @@ JWT_AUTH = {
 #
 # Django Storages
 #
-# AWS_STATIC_BUCKET_NAME = ""
-# AWS_WEBSITE_BUCKET_NAME = ""
-# AWS_STATIC_CUSTOM_DOMAIN = AWS_STATIC_BUCKET_NAME
-# AWS_STORAGE_BUCKET_NAME = AWS_STATIC_BUCKET_NAME
-# STATIC_URL = "http://%s.s3-website-eu-west-1.amazonaws.com/" % AWS_STORAGE_BUCKET_NAME
-# MEDIA_URL = STATIC_URL + '/media/'
+AWS_ACCESS_KEY_ID = ''
+AWS_SECRET_ACCESS_KEY = ''
+AWS_STATIC_BUCKET_NAME = ""
+AWS_WEBSITE_BUCKET_NAME = ""
+AWS_STATIC_CUSTOM_DOMAIN = "%s.s3-website-eu-west-1.amazonaws.com" % AWS_STATIC_BUCKET_NAME
+AWS_STORAGE_BUCKET_NAME = AWS_STATIC_BUCKET_NAME
+STATIC_URL = "http://%s/static/" % AWS_STATIC_CUSTOM_DOMAIN
+MEDIA_URL = "http://%s/media/" % AWS_STATIC_CUSTOM_DOMAIN
 
-# DEFAULT_FILE_STORAGE = 'dialectic.s3utils.MediaRootS3BotoStorage'
-# STATICFILES_STORAGE = 'dialectic.s3utils.StaticRootS3BotoStorage'
-# STATIC_ROOT = ''
+DEFAULT_FILE_STORAGE = 'dialectic.s3utils.MediaRootS3BotoStorage'
+STATICFILES_STORAGE = 'dialectic.s3utils.StaticRootS3BotoStorage'
+STATIC_ROOT = ''
 AWS_S3_SECURE_URLS = False
 AWS_QUERYSTRING_AUTH = False
+
 
 
 
