@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load comments voting %}
+
+{% block content %}
+<h1>{{ topic.name }}</h1>
+<h2>Summary</h2>
+<p>{{ topic.summary }}</p>
+<h2>Description</h2>
+<p>{{ topic.description }}</p>
+<h2>Evidence</h2>
+<ul>
+{% for item in evidence %}
+    <li>
+        {% if item.url %}
+            <a href="{{ item.url }}" target="_blank">{{ item.name | default:item.url }}</a>
+        {% elif item.file %}
+            <a href="{{ item.file.url }}" target="_blank">Download File</a>
+        {% endif %}
+    {% vote_widget item "Valid Evidence" "Invalid Evidence" %}</li>
+{% endfor %}
+    <li><a href="{% url 'policies_evidence_add' topic.pk %}">Add new</a></li>
+</ul>
+
+<h2>Policy options</h2>
+<ul>
+{% for policy in policies %}
+    <li><a href="{% url 'policies_policy_detail' policy.pk %}">{{ policy.name }}</a> {% vote_widget policy "Vote For" "Vote Against" %}</li>
+{% endfor %}
+    <li><a href="{% url 'policies_policy_add' topic.pk %}">Add new</a></li>
+</ul>
+
+<h2>Comments</h2>
+{% render_comment_list for topic %}
+{% render_comment_form for topic %}
+{% endblock %}
